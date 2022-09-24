@@ -1,5 +1,60 @@
 ## SQL Queries
 
+#### Query Optimization Techniques
+
+##### Use Column Names Instead of * in a SELECT Statement.
+
+##### Avoid including a HAVING clause in SELECT statements.
+
+Original query:
+```sql
+SELECT s.cust_id,count(s.cust_id)
+FROM SH.sales s
+GROUP BY s.cust_id
+HAVING s.cust_id != '1660' AND s.cust_id != '2';
+```
+Improved query:
+```sql
+SELECT s.cust_id,count(cust_id)
+FROM SH.sales s
+WHERE s.cust_id != '1660'
+AND s.cust_id !='2'
+GROUP BY s.cust_id;
+```
+##### Un-nest sub queries
+
+Original query:
+```sql
+SELECT *
+FROM SH.products p
+WHERE p.prod_id =
+ (SELECT s.prod_id
+ FROM SH.sales s
+ WHERE s.cust_id = 100996
+ AND s.quantity_sold = 1 );
+```
+Improved query:
+```sql
+SELECT p.*
+FROM SH.products p, sales s
+WHERE p.prod_id = s.prod_id
+AND s.cust_id = 100996
+AND s.quantity_sold = 1;
+```
+##### Remove any redundant mathematics
+
+Original query:
+```sql
+SELECT *
+FROM SH.sales s
+WHERE s.cust_id + 10000 < 35000;
+```
+Improved query:
+```sql
+SELECT *
+FROM SH.sales s
+WHERE s.cust_id < 25000;
+```
 #### Query to skip first five rows and then display remaining all rows from emp table?
 ```sql
 select * from ( select rownum r,ename, sal from emp ) where r>5;
