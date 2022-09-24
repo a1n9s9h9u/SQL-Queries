@@ -1,5 +1,53 @@
 ## SQL Queries
 
+#### Query to skip first five rows and then display remaining all rows from emp table?
+```sql
+select * from ( select rownum r,ename, sal from emp ) where r>5;
+```
+#### Query to display junior most employee details from emp table?
+```sql
+select * from emp where hiredate= ( select max(hiredate) from emp);
+```
+#### Query to display employee details who are getting min salary in each department from emp table?
+```sql
+select * from emp where (deptno, sal) in ( select deptno, min(sal) from emp group by deptno);
+```
+#### Query to display last four rows from emp table?
+```sql
+select * from emp minus select * from emp where rownum<= (select count(*) - 4 from emp);
+```
+#### Query to display first row and last row from emp table?
+```sql
+select * from ( select rownum r, ename, sal from emp) where r=1 or r= ( select count(*) from emp);
+```
+#### Query to display odd number of records from emp table?
+```sql
+select * from ( select rownum r, ename, sal from emp) where mod(r,2)=1;
+```
+#### Query to display 5th highest salary employee from emp table?
+```sql
+select * from ( select rownum r, ename, sal from ( select * from emp order by sal desc)) where r=5;
+```
+#### Query to display nth highest salary employee from emp table using corelated subquery?
+```sql
+select * from emp e1 where &n= ( select count(distinct(sal)) from emp e2 where e2.sal>=e1.sal);
+```
+#### Query to display first ten rows from emp table?
+```sql
+select * from emp where rownum <=10;
+```
+#### Query to display first five highest salary employees from from emp table?
+```sql
+select * from ( select * from emp order by sal desc ) where rownum<=5;
+```
+#### Query to display 2nd, 3rd, 4th, 5th, 7th, 9th row from emp table?
+```sql
+select * from ( select rownum r, ename, sal from emp) where r in (2,3,4,5,7,9);
+```
+#### Query to display second row from emp tablle?
+```sql
+select * from ( select rownum r,ename,sal from emp) where r=2;
+```
 #### Write an SQL query to report the first name, last name, city, and state of each person in the Person table. 
 
 If the address of a personId is not present in the Address table, report null instead. Return the result table in any order. The query result format is in the following example.
